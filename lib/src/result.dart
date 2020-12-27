@@ -13,10 +13,10 @@ abstract class Result<F, S> {
     }
   }
 
-  /// Returns [true] if [Result] is [Failure].
+  /// Returns true if [Result] is [Failure].
   bool get isFailure => this is Failure<F, S>;
 
-  /// Returns [true] if [Result] is [Success].
+  /// Returns true if [Result] is [Success].
   bool get isSuccess => this is Success<F, S>;
 
   /// Returns a new value of [Failure] result.
