@@ -10,3 +10,4 @@ environment:
 
 dev_dependencies:
   pedantic: ^1.9.1
+  http: ^0.12.2

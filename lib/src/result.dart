@@ -25,7 +25,8 @@ abstract class Result<F, S> {
       return (this as Failure<F, S>).value;
     }
 
-    throw Exception('Check if result [isFailure] before accessing [failure]');
+    throw Exception(
+        'Make sure that result [isFailure] before accessing [failure]');
   }
 
   /// Returns a new value of [Success] result.
@@ -34,7 +35,8 @@ abstract class Result<F, S> {
       return (this as Success<F, S>).value;
     }
 
-    throw Exception('Check if result [isSuccess] before accessing [success]');
+    throw Exception(
+        'Make sure that result [isSuccess] before accessing [success]');
   }
 
   /// Returns a new value of [Result] from closure.
