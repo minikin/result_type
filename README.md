@@ -107,9 +107,9 @@ cd example && dart run
 
 ## Support
 
-Post issues and feature requests on the GitHub [issue tracker](https://github.com/epam-cross-platform-lab/dart_result_type/issues).
+Post issues and feature requests on the GitHub [issue tracker](https://github.com/minikin/dart_result_type/issues).
 
 ## License
 
-The source code of Result Type project is available under the Apache license.
-See the [LICENSE](https://github.com/epam-cross-platform-lab/dart_result_type/blob/main/LICENSE) file for more info.
+The source code is distributed under the MIT license.
+See the [LICENSE](https://github.com/minikin/dart_result_type/blob/main/LICENSE) file for more info.
