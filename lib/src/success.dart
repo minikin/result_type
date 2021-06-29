@@ -1,7 +1,10 @@
+import 'package:meta/meta.dart';
+
 import 'result.dart';
 
 /// A success, storing a [Success] value.
-class Success<F, S> extends Result<F, S> {
+@immutable
+class Success<S, F> extends Result<S, F> {
   final S value;
 
   Success(this.value);
@@ -10,7 +13,7 @@ class Success<F, S> extends Result<F, S> {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Success<F, S> && o.value == value;
+    return o is Success<S, F> && o.value == value;
   }
 
   @override
