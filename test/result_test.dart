@@ -71,7 +71,8 @@ void main() {
 
     test('Apply map transformation to successful operation results', () {
       final result = getUser(value: true);
-      final user = result.map((i) => i.toUpperCase()).success;
+      final user =
+          result.map<String, MockError>((i) => i.toUpperCase()).success;
 
       expect(user, 'JOHN DOE');
     });
@@ -80,14 +81,16 @@ void main() {
         '''Throw an error from map transformation without applying transformation to error type''',
         () {
       final result = getUser(value: false);
-      final error = result.map((i) => i.toUpperCase()).failure;
+      final error =
+          result.map<String, MockError>((i) => i.toUpperCase()).failure;
 
       expect(error, const MockError(404));
     });
 
     test('Apply mapError transformation to failure type', () {
-      final error =
-          getUser(value: false).mapError((i) => MockError(i.code - 4)).failure;
+      final error = getUser(value: false)
+          .mapError<String, MockError>((i) => MockError(i.code - 4))
+          .failure;
 
       expect(error.code, const MockError(400).code);
     });
@@ -95,8 +98,8 @@ void main() {
     test(
         '''Returns successful result without applying mapError transformation''',
         () {
-      final maybeError =
-          getUser(value: true).mapError((i) => MockError(i.code - 4));
+      final maybeError = getUser(value: true)
+          .mapError<String, MockError>((i) => MockError(i.code - 4));
 
       if (maybeError.isFailure) {
       } else {

@@ -19,8 +19,10 @@ void main() async {
 
   /// Apply transformation to successful operation results or handle an error.
   if (result.isSuccess) {
-    final items =
-        result.map((i) => i.where((j) => j.title.length > 60)).success;
+    final items = result
+        .map<Iterable<Photo>, NetworkError>(
+            (i) => i.where((j) => j.title.length > 60))
+        .success;
     print('Number of Long Titles: ${items.length}');
   } else {
     print('Error: ${result.failure}');
@@ -32,7 +34,8 @@ void main() async {
   Result<int, Error> getNextAfterInteger(int n) =>
       Success(random.nextInt(n + 1));
 
-  final nextIntegerNestedResults = getNextInteger().map(getNextAfterInteger);
+  final nextIntegerNestedResults =
+      getNextInteger().map<Result<int, Error>, dynamic>(getNextAfterInteger);
   print(nextIntegerNestedResults.runtimeType);
   // Prints: Success<Result<int, Error>, dynamic>
 
