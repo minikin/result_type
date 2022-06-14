@@ -6,7 +6,11 @@
     <a href="https://github.com/minikin/result_type/actions">
     <img src="https://github.com/minikin/result_type/actions/workflows/build.yml/badge.svg" alt="CI Status" />
   </a>
-
+    
+  <a href="https://codecov.io/gh/minikin/result_type">
+    <img src="https://codecov.io/gh/minikin/result_type/branch/main/graph/badge.svg?token=dpljQutAnj"/>
+  </a>
+    
    <a href="https://github.com/minikin/result_type/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Result Type is released under the MIT license." />
   </a>
