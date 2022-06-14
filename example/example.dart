@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:dart_result_type/result.dart';
 import 'package:http/http.dart' as http;
+import 'package:result_type/result_type.dart';
 
 void main() async {
   final random = Random();

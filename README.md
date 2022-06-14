@@ -22,28 +22,29 @@
 
 # Content
 
-- [Features](#features)
-- [Requirements](#requirements)
-- [Install](#install)
-- [Example](#example)
-- [Support](#support)
-- [License](#license)
+- [Content](#content)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Install](#install)
+  - [Example](#example)
+  - [Support](#support)
+  - [License](#license)
 
 ## Features
 
-Result is a type that represents either [Success](https://github.com/minikin/dart_result_type/blob/main/lib/src/success.dart) or [Failure](https://github.com/minikin/dart_result_type/blob/main/lib/src/failure.dart).
+Result is a type that represents either [Success](https://github.com/minikin/result_type/blob/main/lib/src/success.dart) or [Failure](https://github.com/minikin/result_type/blob/main/lib/src/failure.dart).
 
 Inspired by [functional programming](http://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Either.html), [Rust](https://doc.rust-lang.org/std/result/enum.Result.html) and [Swift](https://developer.apple.com/documentation/swift/result).
 
 ## Requirements
 
-- Dart: 2.12.0+
+- Dart: 2.15.0+
 
 ## Install
 
 ```yaml
 dependencies:
-  result_type: ^0.1.0
+  result_type: ^0.1.1
 ```
 
 ## Example
