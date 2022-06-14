@@ -22,12 +22,13 @@
 
 # Content
 
-- [Features](#features)
-- [Requirements](#requirements)
-- [Install](#install)
-- [Example](#example)
-- [Support](#support)
-- [License](#license)
+- [Content](#content)
+  - [Features](#features)
+  - [Requirements](#requirements)
+  - [Install](#install)
+  - [Example](#example)
+  - [Support](#support)
+  - [License](#license)
 
 ## Features
 
@@ -37,13 +38,13 @@ Inspired by [functional programming](http://hackage.haskell.org/package/base-4.1
 
 ## Requirements
 
-- Dart: 2.12.0+
+- Dart: 2.15.0+
 
 ## Install
 
 ```yaml
 dependencies:
-  result_type: ^0.1.0
+  result_type: ^0.1.1
 ```
 
 ## Example
