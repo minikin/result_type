@@ -3,11 +3,11 @@
 <h1 align="center">Result Type for Dart</h1>
 
 <p align="center">
-    <a href="https://github.com/minikin/dart_result_type/actions">
-    <img src="https://github.com/minikin/dart_result_type/workflows/Dart/badge.svg" alt="CI Status" />
+    <a href="https://github.com/minikin/result_type/actions">
+    <img src="https://github.com/minikin/result_type/workflows/Dart/badge.svg" alt="CI Status" />
   </a>
 
-   <a href="https://github.com/minikin/dart_result_type/blob/main/LICENSE">
+   <a href="https://github.com/minikin/result_type/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Result Type is released under the MIT license." />
   </a>
 
@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg" alt="Effective Dart" />
   </a>
 
-  <a href="https://github.com/minikin/dart_result_type/blob/main/CODE_OF_CONDUCT.md">
+  <a href="https://github.com/minikin/result_type/blob/main/CODE_OF_CONDUCT.md">
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
   </a>
 </p>
@@ -109,9 +109,9 @@ cd example && dart run
 
 ## Support
 
-Post issues and feature requests on the GitHub [issue tracker](https://github.com/minikin/dart_result_type/issues).
+Post issues and feature requests on the GitHub [issue tracker](https://github.com/minikin/result_type/issues).
 
 ## License
 
 The source code is distributed under the MIT license.
-See the [LICENSE](https://github.com/minikin/dart_result_type/blob/main/LICENSE) file for more info.
+See the [LICENSE](https://github.com/minikin/result_type/blob/main/LICENSE) file for more info.
