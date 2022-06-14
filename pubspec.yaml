@@ -1,10 +1,13 @@
-name: dart_result_type
+name: result_type
 version: 0.1.1
 description: Result Type for Dart.
-repository: https://github.com/minikin/dart_result_type
+repository: https://github.com/minikin/result_type
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
+
+dependencies:
+  meta: ^1.8.0
 
 dev_dependencies:
   http: ^0.13.4

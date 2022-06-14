@@ -1,4 +1,4 @@
-import 'package:dart_result_type/src/failure.dart';
+import 'package:result_type/result_type.dart';
 import 'package:test/test.dart';
 
 import 'utils/mock_error.dart';
