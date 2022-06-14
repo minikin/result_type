@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://github.com/minikin/result_type/actions">
-    <img src="https://github.com/minikin/result_type/workflows/Dart/badge.svg" alt="CI Status" />
+    <img src="https://github.com/minikin/result_type/actions/workflows/build.yml/badge.svg" alt="CI Status" />
   </a>
 
    <a href="https://github.com/minikin/result_type/blob/main/LICENSE">
