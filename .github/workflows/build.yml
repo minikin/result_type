@@ -38,33 +38,10 @@ jobs:
       - name: Run tests and collect coverage
         run: dart pub global run coverage:test_with_coverage
 
-      # - name: Start Observatory
-      #   run: dart
-      #    --disable-service-auth-codes
-      #    --enable-vm-service=8111
-      #    --pause-isolates-on-exit
-      #    --enable-asserts
-      #    test/test_all.dart &
-
-      # - name: Collect coverage
-      #   run: nohup pub global run coverage:collect_coverage
-      #     --port=8111
-      #     --out=coverage.json
-      #     --wait-paused
-      #     --resume-isolates
-
-      # - name: Format coverage
-      #   run: pub global run coverage:format_coverage
-      #     --lcov
-      #     --in=coverage.json
-      #     --out=lcov.info
-      #     --packages=.packages
-      #     --report-on=lib
-
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
-          path: lcov.info
+          path: coverage/lcov.info
           min_coverage: 100
 
       - name: Upload coverage to Codecov
