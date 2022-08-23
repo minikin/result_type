@@ -42,13 +42,13 @@ Inspired by [functional programming](http://hackage.haskell.org/package/base-4.1
 
 ## Requirements
 
-- Dart: 2.15.0+
+- Dart: 2.17.3+
 
 ## Install
 
 ```yaml
 dependencies:
-  result_type: ^0.1.1
+  result_type: ^0.2.0
 ```
 
 ## Example

@@ -1,3 +1,9 @@
+## [0.2.0] - 14.06.2022.
+
+- Higher minimum Dart version
+- Update License
+- Update example
+
 ## [0.1.1] - 14.06.2022.
 
 - Update dependencies and README.
