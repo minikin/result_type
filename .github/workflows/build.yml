@@ -31,7 +31,7 @@ jobs:
         run: dart run example/example.dart
 
       - name: Active coverage
-        run: pub global activate coverage
+        run: dart pub global activate coverage
 
       - name: Run tests and collect coverage
         run: dart pub global run coverage:test_with_coverage
