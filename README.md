@@ -53,7 +53,7 @@ dependencies:
 
 ## Example
 
-The detailed example can be found at [result_type/example/example.dart](https://github.com/minikin/dart_result_type/blob/main/example/example.dart).
+The detailed example can be found at [result_type/example/example.dart](https://github.com/minikin/result_type/blob/main/example/example.dart).
 
 ```dart
 import 'dart:async';
