@@ -7,7 +7,7 @@ typedef Completion<T> = void Function(T value);
 
 /// A value that represents either a success or a failure, including an
 /// associated value in each case.
-abstract class Result<S, F> {
+sealed class Result<S, F> {
   /// Returns true if [Result] is [Failure].
   bool get isFailure => this is Failure<S, F>;
 

@@ -4,7 +4,7 @@ description: Result Type for Dart.
 repository: https://github.com/minikin/result_type
 
 environment:
-  sdk: '>=3.0.0-179.0.dev'
+  sdk: ">=3.0.0-259.0.dev <=4.0.0"
 
 dependencies:
   meta: ^1.8.0
