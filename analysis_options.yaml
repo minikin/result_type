@@ -1,21 +1,8 @@
 analyzer:
   language:
+    strict-casts: true
     strict-inference: true
     strict-raw-types: true
-# https://github.com/dart-lang/sdk/blob/main/tools/experimental_features.yaml
-# https://dart.dev/tools/experiment-flags
-  enable-experiment:
-   - variance
-   - value-class
-   - extension-types
-   - macros
-   - inference-update-2
-   - records
-   - patterns
-   - inline-class
-   - sealed-class
-   - class-modifiers
-   - const-functions
   errors:
     always_put_required_named_parameters_first: error
     avoid_relative_lib_imports: error
@@ -67,7 +54,6 @@ linter:
     - prefer_adjacent_string_concatenation
     - prefer_collection_literals
     - prefer_const_constructors
-    - prefer_equal_for_default_values
     - prefer_final_fields
     - prefer_final_locals
     - prefer_function_declarations_over_variables

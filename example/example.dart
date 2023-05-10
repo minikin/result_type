@@ -81,7 +81,11 @@ extension PhotoExtension on Photo {
   static List<Photo> parsePhotos(String responseBody) {
     final jsonObject = jsonDecode(responseBody) as Iterable;
     return jsonObject
-        .map<Photo>((json) => Photo.fromJson(Map<String, Object>.from(json)))
+        .map<Photo>(
+          (json) => Photo.fromJson(
+            Map<String, Object>.from(json as Map<String, Object>),
+          ),
+        )
         .toList();
   }
 }

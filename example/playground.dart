@@ -6,7 +6,7 @@
   }
 }
 
-sealed class Shape {
+sealed  class Shape {
 }
 
 class Square implements Shape {
