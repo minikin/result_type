@@ -1,13 +1,12 @@
 // ignore_for_file: lines_longer_than_80_chars, avoid_shadowing_type_parameters
-import 'failure.dart';
-import 'success.dart';
+import 'package:meta/meta.dart';
 
 /// Callbacks that return [Success] or [Failure].
 typedef Completion<T> = void Function(T value);
 
 /// A value that represents either a success or a failure, including an
 /// associated value in each case.
-abstract class Result<S, F> {
+sealed class Result<S, F> {
   /// Returns true if [Result] is [Failure].
   bool get isFailure => this is Failure<S, F>;
 
@@ -180,4 +179,46 @@ abstract class Result<S, F> {
       return transform(right.value);
     }
   }
+}
+
+/// A success, storing a [Success] value.
+@immutable
+class Success<S, F> extends Result<S, F> {
+  final S value;
+
+  Success(this.value);
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is Success<S, F> && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() => 'Success: $value';
+}
+
+/// A failure, storing a [Failure] value.
+@immutable
+class Failure<S, F> extends Result<S, F> {
+  final F value;
+
+  Failure(this.value);
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is Failure<S, F> && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() => 'Failure: $value';
 }
