@@ -53,7 +53,7 @@ void main() async {
     });
 }
 
-class Photo {
+final class Photo {
   final int id;
   final String title;
   final String thumbnailUrl;
@@ -64,7 +64,7 @@ class Photo {
     required this.thumbnailUrl,
   });
 
-  factory Photo.fromJson(Map<String, Object> json) {
+  factory Photo.fromJson(Map<String, dynamic> json) {
     return Photo(
       id: json['id'] as int,
       title: json['title'] as String,
@@ -83,7 +83,7 @@ extension PhotoExtension on Photo {
     return jsonObject
         .map<Photo>(
           (json) => Photo.fromJson(
-            Map<String, Object>.from(json as Map<String, Object>),
+            Map<String, dynamic>.from(json as Map<String, dynamic>),
           ),
         )
         .toList();

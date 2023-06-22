@@ -183,7 +183,7 @@ sealed class Result<S, F> {
 
 /// A success, storing a [Success] value.
 @immutable
-class Success<S, F> extends Result<S, F> {
+final class Success<S, F> extends Result<S, F> {
   final S value;
 
   Success(this.value);
@@ -204,7 +204,7 @@ class Success<S, F> extends Result<S, F> {
 
 /// A failure, storing a [Failure] value.
 @immutable
-class Failure<S, F> extends Result<S, F> {
+final class Failure<S, F> extends Result<S, F> {
   final F value;
 
   Failure(this.value);
