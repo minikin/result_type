@@ -12,6 +12,8 @@ analyzer:
 
 linter:
   rules:
+    - matching_super_parameters
+    - implicit_reopen
     - avoid_catches_without_on_clauses
     - avoid_catching_errors
     - avoid_classes_with_only_static_members
