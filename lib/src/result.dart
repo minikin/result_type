@@ -6,7 +6,7 @@ typedef Completion<T> = void Function(T value);
 
 /// A value that represents either a success or a failure, including an
 /// associated value in each case.
-sealed class Result<S, F> {
+sealed class Result<S, F extends Exception> {
   /// Returns true if [Result] is [Failure].
   bool get isFailure => this is Failure<S, F>;
 
@@ -106,14 +106,11 @@ sealed class Result<S, F> {
   /// }
   /// ```
   ///
-  Result<U, F> map<U, F>(U Function(S) transform) {
-    if (isSuccess) {
-      final left = this as Success<S, F>;
-      return Success(transform(left.value));
-    } else {
-      final right = this as Failure<S, F>;
-      return Failure(right.value);
-    }
+  Result<U, F> map<U, F extends Exception>(U Function(S) transform) {
+    return switch (this) {
+      Success(value: final data) => transform(data) as Success<U, F>,
+      Failure(value: final error) => error as Failure<U, F>,
+    };
   }
 
   /// Maps a [Result<S, F>] to [Result<S, E>] by applying a function
@@ -122,7 +119,7 @@ sealed class Result<S, F> {
   /// This function can be used to pass through a successful result
   /// while applying transformation to [Failure].
   ///
-  Result<S, E> mapError<S, E>(E Function(F) transform) {
+  Result<S, E> mapError<S, E extends Exception>(E Function(F) transform) {
     if (isSuccess) {
       final left = this as Success<S, F>;
       return Success(left.value);
@@ -154,7 +151,8 @@ sealed class Result<S, F> {
   /// print(nextIntegerUnboxedResults.runtimeType);
   /// `Prints: Success<int, Error>`
   ///  ```
-  Result<U, F> flatMap<U, F>(Result<U, F> Function(S) transform) {
+  Result<U, F> flatMap<U, F extends Exception>(
+      Result<U, F> Function(S) transform) {
     if (isSuccess) {
       final left = this as Success<S, F>;
       return transform(left.value);
@@ -170,7 +168,8 @@ sealed class Result<S, F> {
   /// This function can be used to pass through a successful result
   /// while unboxing [Failure] and applying transformation to it.
   ///
-  Result<S, E> flatMapError<S, E>(Result<S, E> Function(F) transform) {
+  Result<S, E> flatMapError<S, E extends Exception>(
+      Result<S, E> Function(F) transform) {
     if (isSuccess) {
       final left = this as Success<S, F>;
       return Success(left.value);
@@ -179,11 +178,56 @@ sealed class Result<S, F> {
       return transform(right.value);
     }
   }
+
+  /// Unwraps the result and returns the value or error.
+  ///
+  /// This method is used to extract the value or error from a `Result` object.
+  /// If the result is a `Success`, the value is returned as a `Success` object.
+  /// If the result is a `Failure`, the error is returned as a `Failure` object.
+  ///
+  /// The generic type parameters `U` and `F` represent the type of the value and error, respectively.
+  ///
+  /// Returns:
+  /// - The value as a `Success` object if the result is a `Success`.
+  /// - The error as a `Failure` object if the result is a `Failure`.
+  Result<S, F> unwrap() {
+    if (isSuccess) {
+      final left = this as Success<S, F>;
+      return Success(left.value);
+    } else {
+      final right = this as Failure<S, F>;
+      return Failure(right.value);
+    }
+  }
+
+  /// Unwraps the `Success` value or returns the provided initial value.
+  ///
+  /// If the `Result` is a `Success`, this method returns the inner `Success` value.
+  /// If the `Result` is a `Failure`, this method returns the provided initial value.
+  ///
+  /// The type of the initial value should match the type of the `Success` value.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// Result<int, String> result = Success(42);
+  /// int unwrappedValue = result.unwrapOr(0); // Returns 42
+  ///
+  /// Result<int, String> result2 = Failure("Error");
+  /// int unwrappedValue2 = result2.unwrapOr(0); // Returns 0
+  /// ```
+  Success<S, F> unwrapOr<T>(T initial) {
+    if (isSuccess) {
+      final left = this as Success<S, F>;
+      return Success(left.value);
+    } else {
+      return Success(initial as S);
+    }
+  }
 }
 
 /// A success, storing a [Success] value.
 @immutable
-final class Success<S, F> extends Result<S, F> {
+final class Success<S, F extends Exception> extends Result<S, F> {
   final S value;
 
   Success(this.value);
@@ -204,7 +248,7 @@ final class Success<S, F> extends Result<S, F> {
 
 /// A failure, storing a [Failure] value.
 @immutable
-final class Failure<S, F> extends Result<S, F> {
+final class Failure<S, F extends Exception> extends Result<S, F> {
   final F value;
 
   Failure(this.value);
