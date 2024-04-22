@@ -16,10 +16,6 @@ void main() async {
   final nullPointerException = await PhotosService.nullPointerException(client);
   final photosResult3 = await PhotosService.getPhotos(client);
 
-  final unwrap = result.unwrap();
-
-  print(unwrap);
-
   final photosOr = photosResult.unwrapOr([
     const Photo(
       id: 1,
@@ -79,13 +75,4 @@ void main() async {
 //     }, (error) {
 //       print('Error: $error');
 //     });
-}
-
-void crash() {
-  throw Exception('Crash');
-}
-
-void crashWithStackTrace() {
-  final numbers = <int>[1, 2, 3];
-  print(numbers[5]);
 }

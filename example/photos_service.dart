@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:result_type/result_type.dart';
 
+import 'crasher.dart';
 import 'network_error.dart';
 import 'photo.dart';
 
@@ -24,8 +25,7 @@ final class PhotosService {
   ) async {
     final response = await client.get(_photosUri);
 
-    // This will throw an index out of range exception.
-    _outOfRange();
+    Crasher.outOfRange();
 
     return _handleResult(response);
   }
@@ -35,8 +35,7 @@ final class PhotosService {
   ) async {
     final response = await client.get(_photosUri);
 
-    // This will throw a null pointer exception because text is null.
-    _nullPointerException();
+    Crasher.nullPointerException();
 
     return _handleResult(response);
   }
@@ -55,14 +54,4 @@ final class PhotosService {
         return Failure(UnsupportedError(stackTrace: StackTrace.current));
     }
   }
-}
-
-void _outOfRange() {
-  final numbers = <int>[1, 2, 3];
-  print(numbers[5]);
-}
-
-void _nullPointerException() {
-  String? text;
-  print(text!.length);
 }
