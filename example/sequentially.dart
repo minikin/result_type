@@ -21,7 +21,7 @@ final class ImaginaryService {
 
   static Future<Result<String, IOError>> fetchData1() async {
     await Future.delayed(const Duration(seconds: 1));
-    final value = 'Data from fetchData1';
+    final value = 'Data from fetchData1==';
 
     return _handleResult(value);
   }

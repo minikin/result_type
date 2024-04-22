@@ -57,7 +57,7 @@ sealed class Result<S, F extends Exception> {
     }
 
     throw Exception(
-      'Make sure that result [isSuccess] before accessing [success]',
+      'Make sure that result [isSuccess] before accessing [success].',
     );
   }
 
@@ -263,6 +263,8 @@ final class Failure<S, F extends Exception> extends Result<S, F> {
   @override
   int get hashCode => value.hashCode;
 
+  StackTrace get _stackTrace => StackTrace.current;
+
   @override
-  String toString() => 'Failure: $value';
+  String toString() => 'Failure: $value, $_stackTrace';
 }
