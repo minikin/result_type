@@ -8,6 +8,7 @@ void main() async {
   final result2 = await ImaginaryService.fetchData2(result1.success);
   final result3 = await ImaginaryService.fetchData2(result2.success);
 
+  // Print the result of the last operation: `Success: Default Data`
   print(result3.unwrapOr('Default Data'));
 
   // This will throw an exception as `_handleResult`
