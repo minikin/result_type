@@ -11,6 +11,14 @@ final class Photo {
     required this.thumbnailUrl,
   });
 
+  factory Photo.initial() {
+    return const Photo(
+      id: 1,
+      title: 'title',
+      thumbnailUrl: 'thumbnailUrl',
+    );
+  }
+
   factory Photo.fromJson(Map<String, dynamic> json) {
     return Photo(
       id: json['id'] as int,

@@ -3,18 +3,16 @@
 import 'package:result_type/result_type.dart';
 
 void main() async {
+  // Chain multiple asynchronous operations.
   final result1 = await ImaginaryService.fetchData1();
+  final result2 = await ImaginaryService.fetchData2(result1.success);
+  final result3 = await ImaginaryService.fetchData2(result2.success);
 
-  final ddd = result1.unwrap();
+  print(result3.unwrapOr('Default Data'));
 
-  // final result2 = await ImaginaryService.fetchData2(ddd);
-  // print(result2);
-
-  // final result3 = await ImaginaryService.fetchData2(result2.success);
-  // print(result3);
-
-  // final data = result3.unwrapOr('Default Data');
-  // print(data);
+  // This will throw an exception as `_handleResult`
+  // has a case with 'Wrong Data'.
+  print(result3.unwrap());
 }
 
 final class ImaginaryService {
@@ -22,7 +20,7 @@ final class ImaginaryService {
 
   static Future<Result<String, IOError>> fetchData1() async {
     await Future.delayed(const Duration(seconds: 1));
-    final value = 'Data from fetchData1==';
+    final value = 'Data from fetchData1';
 
     return _handleResult(value);
   }
@@ -49,7 +47,7 @@ final class ImaginaryService {
         return Success('Data from fetchData2');
       case 'Data from fetchData3':
         return Success('Data from fetchData3');
-      case 'Data from fetchData2 + Data from fetchData2':
+      case 'Data from fetchData2 + Data from fetchData2 + Wrong Data':
         return Success('Data from fetchData2');
       default:
         return Failure(

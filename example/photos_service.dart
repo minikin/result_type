@@ -47,11 +47,11 @@ final class PhotosService {
       case 200:
         return Success(PhotoExtension.parsePhotos(response.body));
       case 400:
-        return Failure(BadRequest(stackTrace: StackTrace.current));
+        return Failure(BadRequest());
       case 404:
-        return Failure(NotFound(stackTrace: StackTrace.current));
+        return Failure(NotFound());
       default:
-        return Failure(UnsupportedError(stackTrace: StackTrace.current));
+        return Failure(UnsupportedError());
     }
   }
 }
