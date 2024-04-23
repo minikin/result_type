@@ -2,27 +2,24 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
-import 'photo.dart';
-import 'photos_service.dart';
-
 final client = http.Client();
 final random = Random();
 
 void main() async {
-  final photosResult = await PhotosService.getPhotos(client);
+  // final photosResult = await PhotosService.getPhotos(client);
 
-  final outOfRangeException = await PhotosService.outOfRangeException(client);
-  final photosResult2 = await PhotosService.getPhotos(client);
-  final nullPointerException = await PhotosService.nullPointerException(client);
-  final photosResult3 = await PhotosService.getPhotos(client);
+  // final outOfRangeException = await PhotosService.outOfRangeException(client);
+  // final photosResult2 = await PhotosService.getPhotos(client);
+  // final nullPointerException = await PhotosService.nullPointerException(client);
+  // final photosResult3 = await PhotosService.getPhotos(client);
 
-  final photosOr = photosResult.unwrapOr([
-    const Photo(
-      id: 1,
-      title: 'title',
-      thumbnailUrl: 'thumbnailUrl',
-    )
-  ]);
+  // final photosOr = photosResult.unwrapOr([
+  //   const Photo(
+  //     id: 1,
+  //     title: 'title',
+  //     thumbnailUrl: 'thumbnailUrl',
+  //   )
+  // ]);
 
   //print(photosOr);
 
