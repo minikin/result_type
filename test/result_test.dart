@@ -141,7 +141,7 @@ void main() {
           Failure(MockError(error.code));
 
       final nextIntegerUnboxedResults =
-          getNextInteger().flatMapError(getNextAfterInteger);
+          getNextInteger().flatMapError<int, MockError>(getNextAfterInteger);
 
       expect(
         nextIntegerUnboxedResults,
@@ -157,7 +157,7 @@ void main() {
           Failure(MockError(error.code));
 
       final nextIntegerUnboxedResults =
-          getNextInteger().flatMapError(getNextAfterInteger);
+          getNextInteger().flatMapError<int, MockError>(getNextAfterInteger);
 
       expect(
         nextIntegerUnboxedResults,

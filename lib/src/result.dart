@@ -1,4 +1,4 @@
-// ignore_for_file: lines_longer_than_80_chars, avoid_shadowing_type_parameters
+// ignore_for_file: lines_longer_than_80_chars
 import 'package:meta/meta.dart';
 
 /// Callbacks that return [Success] or [Failure].
@@ -7,6 +7,13 @@ typedef Completion<T> = void Function(T value);
 /// A value that represents either a success or a failure, including an
 /// associated value in each case.
 sealed class Result<S, F extends Exception> {
+  /// Returns the [Failure] instance if this result is a [Failure],
+  /// otherwise throws a cast error.
+  Failure<S, F> get _right => this as Failure<S, F>;
+
+  /// Returns the left value of a [Success] instance.
+  Success<S, F> get _left => this as Success<S, F>;
+
   /// Returns true if [Result] is [Failure].
   bool get isFailure => this is Failure<S, F>;
 
@@ -14,6 +21,10 @@ sealed class Result<S, F extends Exception> {
   bool get isSuccess => this is Success<S, F>;
 
   /// Returns a new value of [Failure] result.
+  ///
+  /// Throws an exception if the result is [Success].
+  ///
+  /// Example usage.
   ///
   /// Handle an error or do something with successful operation results:
   ///
@@ -28,16 +39,20 @@ sealed class Result<S, F extends Exception> {
   /// ```
   ///
   F get failure {
-    if (this is Failure<S, F>) {
+    if (isFailure) {
       return (this as Failure<S, F>).value;
     }
 
     throw Exception(
-      'Make sure that result [isFailure] before accessing [failure]',
+      'Make sure that result [isFailure] before accessing [failure]. /n$_left',
     );
   }
 
   /// Returns a new value of [Success] result.
+  ///
+  /// Throws an exception if the result is [Failure].
+  ///
+  /// Example usage.
   ///
   /// Do something with successful operation results or handle an error:
   ///
@@ -52,19 +67,19 @@ sealed class Result<S, F extends Exception> {
   /// ```
   ///
   S get success {
-    if (this is Success<S, F>) {
+    if (isSuccess) {
       return (this as Success<S, F>).value;
     }
 
     throw Exception(
-      'Make sure that result [isSuccess] before accessing [success].',
+      'Make sure that result [isSuccess] before accessing [success]. \n$_right',
     );
   }
 
   /// Returns a new value of [Result] from closure
   /// either a success or a failure.
   ///
-  /// This example shows how to use completion handler.
+  /// Example usage:
   ///
   /// ```dart
   /// final result = await getPhotos();
@@ -79,19 +94,17 @@ sealed class Result<S, F extends Exception> {
   ///
   void result(Completion<S> success, Completion<F> failure) {
     if (isSuccess) {
-      final left = this as Success<S, F>;
-      success(left.value);
-    }
-
-    if (isFailure) {
-      final right = this as Failure<S, F>;
-      failure(right.value);
+      success(_left.value);
+    } else {
+      failure(_right.value);
     }
   }
 
   /// Maps a [Result<S, F>] to [Result<U, F>] by applying a function
   /// to a contained [Success] value, leaving an [Failure] value untouched.
   /// This function can be used to compose the results of two functions.
+  ///
+  /// Example usage.
   ///
   /// Apply transformation to successful operation results or handle an error:
   ///
@@ -106,11 +119,16 @@ sealed class Result<S, F extends Exception> {
   /// }
   /// ```
   ///
-  Result<U, F> map<U, F extends Exception>(U Function(S) transform) {
-    return switch (this) {
-      Success(value: final data) => transform(data) as Success<U, F>,
-      Failure(value: final error) => error as Failure<U, F>,
-    };
+  Result<U, F> map<U, E extends Exception>(U Function(S) transform) {
+    // return switch (this) {
+    //   Success(value: final data) => transform(data) as Success<U, F>,
+    //   Failure(value: final error) => error as Failure<U, F>,
+    // };
+    if (isSuccess) {
+      return Success(transform(_left.value));
+    } else {
+      return Failure(_right.value);
+    }
   }
 
   /// Maps a [Result<S, F>] to [Result<S, E>] by applying a function
@@ -119,13 +137,11 @@ sealed class Result<S, F extends Exception> {
   /// This function can be used to pass through a successful result
   /// while applying transformation to [Failure].
   ///
-  Result<S, E> mapError<S, E extends Exception>(E Function(F) transform) {
+  Result<S, E> mapError<V, E extends Exception>(E Function(F) transform) {
     if (isSuccess) {
-      final left = this as Success<S, F>;
-      return Success(left.value);
+      return Success(_left.value);
     } else {
-      final right = this as Failure<S, F>;
-      return Failure(transform(right.value));
+      return Failure(transform(_right.value));
     }
   }
 
@@ -139,6 +155,8 @@ sealed class Result<S, F extends Exception> {
   /// In this example, note the difference in the result of using `map` and
   /// `flatMap` with a transformation that returns an result type.
   ///
+  /// Example usage:
+  ///
   /// ```dart
   /// Result<int, Error> getNextInteger() => Success(random.nextInt(4));
   /// Result<int, Error> getNextAfterInteger(int n) => Success(random.nextInt(n + 1));
@@ -151,14 +169,13 @@ sealed class Result<S, F extends Exception> {
   /// print(nextIntegerUnboxedResults.runtimeType);
   /// `Prints: Success<int, Error>`
   ///  ```
-  Result<U, F> flatMap<U, F extends Exception>(
-      Result<U, F> Function(S) transform) {
+  Result<U, F> flatMap<U, E extends Exception>(
+    Result<U, F> Function(S) transform,
+  ) {
     if (isSuccess) {
-      final left = this as Success<S, F>;
-      return transform(left.value);
+      return transform(_left.value);
     } else {
-      final right = this as Failure<S, F>;
-      return Failure(right.value);
+      return Failure(_right.value);
     }
   }
 
@@ -168,57 +185,59 @@ sealed class Result<S, F extends Exception> {
   /// This function can be used to pass through a successful result
   /// while unboxing [Failure] and applying transformation to it.
   ///
-  Result<S, E> flatMapError<S, E extends Exception>(
-      Result<S, E> Function(F) transform) {
+  Result<S, E> flatMapError<V, E extends Exception>(
+    Result<S, E> Function(F) transform,
+  ) {
     if (isSuccess) {
-      final left = this as Success<S, F>;
-      return Success(left.value);
+      return Success(_left.value);
     } else {
-      final right = this as Failure<S, F>;
-      return transform(right.value);
+      return transform(_right.value);
     }
   }
 
-  /// Unwraps the result and returns the value or error.
+  /// Unwraps the [Result] and returns the [Success] value.
   ///
-  /// This method is used to extract the value or error from a `Result` object.
-  /// If the result is a `Success`, the value is returned as a `Success` object.
-  /// If the result is a `Failure`, the error is returned as a `Failure` object.
+  /// If the result is a [Success], returns the success value.
+  /// If the result is a [Failure], throws an exception.
   ///
-  /// The generic type parameters `U` and `F` represent the type of the value and error, respectively.
-  ///
-  /// Returns:
-  /// - The value as a `Success` object if the result is a `Success`.
-  /// - The error as a `Failure` object if the result is a `Failure`.
-  Result<S, F> unwrap() {
-    if (isSuccess) {
-      final left = this as Success<S, F>;
-      return Success(left.value);
-    } else {
-      final right = this as Failure<S, F>;
-      return Failure(right.value);
-    }
-  }
-
-  /// Unwraps the `Success` value or returns the provided initial value.
-  ///
-  /// If the `Result` is a `Success`, this method returns the inner `Success` value.
-  /// If the `Result` is a `Failure`, this method returns the provided initial value.
-  ///
-  /// The type of the initial value should match the type of the `Success` value.
+  /// Use this method when you are certain that the result is a success
+  /// and you want to access the [Success] value directly.
   ///
   /// Example usage:
-  /// ```dart
-  /// Result<int, String> result = Success(42);
-  /// int unwrappedValue = result.unwrapOr(0); // Returns 42
   ///
-  /// Result<int, String> result2 = Failure("Error");
-  /// int unwrappedValue2 = result2.unwrapOr(0); // Returns 0
+  /// ```dart
+  /// final result = await someAsyncOperation();
+  ///
+  /// final value = result.unwrap();
+  /// print('Success value: $value');
+  /// ```
+  Result<S, F> unwrap() {
+    if (isSuccess) {
+      return Success(_left.value);
+    } else {
+      throw Exception('Cannot unwrap a failure result. \n$_right');
+    }
+  }
+
+  /// Unwraps the [Result] and returns the [Success] value.
+  /// If the result is a [Success], returns the success value.
+  /// If the result is a [Failure], returns the provided [initial] value
+  /// as a [Success].
+  ///
+  /// Use this method when you want to access the [Success] value directly,
+  /// but also handle the case when the result is a [Failure].
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// final result = await someAsyncOperation();
+  ///
+  /// final value = result.unwrapOr(0);
+  /// print('Success value: $value');
   /// ```
   Success<S, F> unwrapOr<T>(T initial) {
     if (isSuccess) {
-      final left = this as Success<S, F>;
-      return Success(left.value);
+      return Success(_left.value);
     } else {
       return Success(initial as S);
     }
@@ -248,10 +267,11 @@ final class Success<S, F extends Exception> extends Result<S, F> {
 
 /// A failure, storing a [Failure] value.
 @immutable
-final class Failure<S, F extends Exception> extends Result<S, F> {
+class Failure<S, F extends Exception> extends Result<S, F> {
   final F value;
+  final Object? message;
 
-  Failure(this.value);
+  Failure(this.value, [this.message]);
 
   @override
   bool operator ==(Object o) {
@@ -266,5 +286,5 @@ final class Failure<S, F extends Exception> extends Result<S, F> {
   StackTrace get _stackTrace => StackTrace.current;
 
   @override
-  String toString() => 'Failure: $value, $_stackTrace';
+  String toString() => 'Failure: $value, $message, $_stackTrace';
 }
