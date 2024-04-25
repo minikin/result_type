@@ -185,6 +185,20 @@ void main() {
     final result = Failure<int, MockError>(const MockError(404));
     expect(result.isSuccess, isFalse);
   });
+
+  test('unwrapOrElse returns success value if result is success', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrapOrElse(0, (t) => t + 1);
+
+    expect(unwrapped, 42);
+  });
+
+  test('unwrapOrElse returns operation result if result is failure', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    final unwrapped = result.unwrapOrElse(0, (t) => t + 1);
+
+    expect(unwrapped, 1);
+  });
 }
 
 Result<String, MockError> getUser({required bool value}) =>

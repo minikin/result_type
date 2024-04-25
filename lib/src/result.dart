@@ -256,14 +256,14 @@ sealed class Result<S, F extends Exception> {
   /// final value = result.unwrapOr('Text', toString);
   /// print('Success value: $value');
   /// ```
-  Success<S, F> unwrapOrElse<T extends Object>(
+  S unwrapOrElse<T extends Object>(
     T t,
     S Function(T) operation,
   ) {
     if (isSuccess) {
-      return Success(_left.value);
+      return Success(_left.value).value;
     } else {
-      return Success(operation(t));
+      return Success(operation(t)).value;
     }
   }
 }
