@@ -165,6 +165,26 @@ void main() {
       );
     });
   });
+
+  test('isFailure returns true for Failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    expect(result.isFailure, isTrue);
+  });
+
+  test('isFailure returns false for Success result', () {
+    final result = Success<int, MockError>(42);
+    expect(result.isFailure, isFalse);
+  });
+
+  test('isSuccess returns true for Success result', () {
+    final result = Success<int, MockError>(42);
+    expect(result.isSuccess, isTrue);
+  });
+
+  test('isSuccess returns false for Failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    expect(result.isSuccess, isFalse);
+  });
 }
 
 Result<String, MockError> getUser({required bool value}) =>
