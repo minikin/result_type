@@ -120,10 +120,6 @@ sealed class Result<S, F extends Exception> {
   /// ```
   ///
   Result<U, F> map<U, E extends Exception>(U Function(S) transform) {
-    // return switch (this) {
-    //   Success(value: final data) => transform(data) as Success<U, F>,
-    //   Failure(value: final error) => error as Failure<U, F>,
-    // };
     if (isSuccess) {
       return Success(transform(_left.value));
     } else {
@@ -242,6 +238,34 @@ sealed class Result<S, F extends Exception> {
       return Success(initial as S);
     }
   }
+
+  /// Unwraps the [Result] and returns the [Success] value.
+  /// If the result is a [Success], returns the success value.
+  /// If the result is a [Failure], returns the provided [initial] value
+  /// as a [Success].
+  ///
+  /// Use this method when you want to access the [Success] value directly,
+  /// but also handle the case when the result is a [Failure].
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// String toString(String string) => string.length.toString();
+  /// final result = await someAsyncOperation();
+  ///
+  /// final value = result.unwrapOr('Text', toString);
+  /// print('Success value: $value');
+  /// ```
+  Success<S, F> unwrapOrElse<T extends Object>(
+    T t,
+    S Function(T) operation,
+  ) {
+    if (isSuccess) {
+      return Success(_left.value);
+    } else {
+      return Success(operation(t));
+    }
+  }
 }
 
 /// A success, storing a [Success] value.
@@ -267,7 +291,7 @@ final class Success<S, F extends Exception> extends Result<S, F> {
 
 /// A failure, storing a [Failure] value.
 @immutable
-class Failure<S, F extends Exception> extends Result<S, F> {
+final class Failure<S, F extends Exception> extends Result<S, F> {
   final F value;
   final Object? message;
 

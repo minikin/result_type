@@ -13,8 +13,14 @@ void main() async {
 
   // This will throw an exception as `_handleResult`
   // has a case with 'Wrong Data'.
-  print(result3.unwrap());
+  //print(result3.unwrap());
+
+  final one = result3.unwrapOrElse('Default (((((Data)))))', length);
+  // Print the result of the last operation: `Success: 22`
+  print(one);
 }
+
+String length(String string) => string.length.toString();
 
 final class ImaginaryService {
   ImaginaryService._();
