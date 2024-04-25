@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:result_type/src/result.dart';
 
+import 'imaginary_service.dart';
 import 'photo.dart';
 import 'photos_service.dart';
 
@@ -28,6 +29,24 @@ void main() async {
   } else {
     print('Error: ${photosResult.failure}');
   }
+
+  // Chain multiple asynchronous operations.
+  final result1 = await ImaginaryService.fetchData1();
+  final result2 = await ImaginaryService.fetchData2(result1.success);
+  final result3 = await ImaginaryService.fetchData2(result2.success);
+
+  // Print the result of the last operation: `Success: Default Data`
+  print(result3.unwrapOr('Default Data'));
+
+  // This will throw an exception as `_handleResult`
+  // has a case with 'Wrong Data'.
+  //print(result3.unwrap());
+
+  String length(String string) => string.length.toString();
+
+  final one = result3.unwrapOrElse('Default (((((Data)))))', length);
+  // Print the result of the last operation: `22`
+  print(one);
 
   /// Apply transformation to successful operation results or handle an error.
   if (photosResult.isSuccess) {

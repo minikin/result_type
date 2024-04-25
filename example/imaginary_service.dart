@@ -2,26 +2,6 @@
 
 import 'package:result_type/result_type.dart';
 
-void main() async {
-  // Chain multiple asynchronous operations.
-  final result1 = await ImaginaryService.fetchData1();
-  final result2 = await ImaginaryService.fetchData2(result1.success);
-  final result3 = await ImaginaryService.fetchData2(result2.success);
-
-  // Print the result of the last operation: `Success: Default Data`
-  print(result3.unwrapOr('Default Data'));
-
-  // This will throw an exception as `_handleResult`
-  // has a case with 'Wrong Data'.
-  //print(result3.unwrap());
-
-  final one = result3.unwrapOrElse('Default (((((Data)))))', length);
-  // Print the result of the last operation: `Success: 22`
-  print(one);
-}
-
-String length(String string) => string.length.toString();
-
 final class ImaginaryService {
   ImaginaryService._();
 

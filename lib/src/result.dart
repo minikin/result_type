@@ -293,9 +293,8 @@ final class Success<S, F extends Exception> extends Result<S, F> {
 @immutable
 final class Failure<S, F extends Exception> extends Result<S, F> {
   final F value;
-  final Object? message;
 
-  Failure(this.value, [this.message]);
+  Failure(this.value);
 
   @override
   bool operator ==(Object o) {
@@ -310,5 +309,5 @@ final class Failure<S, F extends Exception> extends Result<S, F> {
   StackTrace get _stackTrace => StackTrace.current;
 
   @override
-  String toString() => 'Failure: $value, $message, $_stackTrace';
+  String toString() => 'Failure: $value, $_stackTrace';
 }
