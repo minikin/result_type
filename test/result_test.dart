@@ -199,6 +199,33 @@ void main() {
 
     expect(unwrapped, 1);
   });
+
+  test('unwrapOr returns success value if result is success', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrapOr(0);
+
+    expect(unwrapped, 42);
+  });
+
+  test('unwrapOr returns initial value if result is failure', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    final unwrapped = result.unwrapOr(0);
+
+    expect(unwrapped, 0);
+  });
+
+  test('Unwrap success result', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrap();
+
+    expect(unwrapped, 42);
+  });
+
+  test('Throw exception when unwrapping failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+
+    expect(result.unwrap, throwsException);
+  });
 }
 
 Result<String, MockError> getUser({required bool value}) =>

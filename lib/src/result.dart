@@ -207,9 +207,9 @@ sealed class Result<S, F extends Exception> {
   /// final value = result.unwrap();
   /// print('Success value: $value');
   /// ```
-  Result<S, F> unwrap() {
+  S unwrap() {
     if (isSuccess) {
-      return Success(_left.value);
+      return _left.value;
     } else {
       throw Exception('Cannot unwrap a failure result. \n$_right');
     }
@@ -231,11 +231,11 @@ sealed class Result<S, F extends Exception> {
   /// final value = result.unwrapOr(0);
   /// print('Success value: $value');
   /// ```
-  Success<S, F> unwrapOr<T>(T initial) {
+  S unwrapOr<T>(T initial) {
     if (isSuccess) {
-      return Success(_left.value);
+      return _left.value;
     } else {
-      return Success(initial as S);
+      return Success(initial as S).value;
     }
   }
 
