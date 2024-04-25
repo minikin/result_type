@@ -87,7 +87,7 @@ void main() async {
   final result2 = await ImaginaryService.fetchData2(result1.success);
   final result3 = await ImaginaryService.fetchData2(result2.success);
 
-  // Print the result of the last operation: `Default Data`
+  // Print the result of the last operation: `Success: Default Data`
   print(result3.unwrapOr('Default Data'));
 
   // This will throw an exception as `_handleResult`
@@ -96,9 +96,9 @@ void main() async {
 
   String length(String string) => string.length.toString();
 
-  final one = result3.unwrapOrElse('Default (((((Data)))))', length);
+  final unwrapOrElse = result3.unwrapOrElse('Default (((((Data)))))', length);
   // Print the result of the last operation: `22`
-  print(one);
+  print(unwrapOrElse);
 
   /// Apply transformation to successful operation results or handle an error.
   if (photosResult.isSuccess) {
@@ -137,6 +137,7 @@ void main() async {
       print('Error: $error');
     });
 }
+
 ```
 
 To see examples of the following package in action:
