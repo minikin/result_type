@@ -1,3 +1,10 @@
+## [1.0.0] - 30.04.2024.
+
+- **BREAKING**:  update Result implementation
+- add `unwrap` and `unwrapOr` and `unwrapOrElse`
+- improve stack trace reporting
+- update examples
+
 ## [0.2.0] - 14.06.2022.
 
 - Higher minimum Dart version
