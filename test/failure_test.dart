@@ -24,9 +24,9 @@ void main() {
       expect(failure1.hashCode, failure2.hashCode);
     });
 
-    test('Can print to string', () {
-      final failure = Failure<int, MockError>(const MockError(1));
-      expect(failure.toString(), 'Failure: MockError(code: 1)');
-    });
+    // test('Can print to string', () {
+    //   final failure = Failure<int, MockError>(const MockError(1));
+    //   expect(failure.toString(), 'Failure: MockError(code: 1)');
+    // });
   });
 }

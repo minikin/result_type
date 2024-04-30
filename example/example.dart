@@ -1,41 +1,74 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
-import 'package:result_type/result_type.dart';
+import 'package:result_type/src/result.dart';
+
+import 'imaginary_service.dart';
+import 'photo.dart';
+import 'photos_service.dart';
+
+final client = http.Client();
+final random = Random();
 
 void main() async {
-  final random = Random();
-  final client = http.Client();
-  final result = await getPhotos(client);
+  final photosResult = await PhotosService.getPhotos(client);
+
+  final photosOr = photosResult.unwrapOr([Photo.initial()]);
+
+  print(photosOr);
+
+  /// Use `switch` to handle both success and failure.
+  final _ = switch (photosResult) {
+    Success(value: final data) => data,
+    Failure(value: final error) => 'Error: $error'
+  };
 
   /// Do something with successful operation results or handle an error.
-  if (result.isSuccess) {
-    print('Photos Items: ${result.success}');
+  if (photosResult.isSuccess) {
+    print('Photos Items: ${photosResult.success}');
   } else {
-    print('Error: ${result.failure}');
+    print('Error: ${photosResult.failure}');
   }
 
+  // Chain multiple asynchronous operations.
+  final result1 = await ImaginaryService.fetchData1();
+  final result2 = await ImaginaryService.fetchData2(result1.success);
+  final result3 = await ImaginaryService.fetchData2(result2.success);
+
+  // Print the result of the last operation: `Success: Default Data`
+  print(result3.unwrapOr('Default Data'));
+
+  // This will throw an exception as `_handleResult`
+  // has a case with 'Wrong Data'.
+  //print(result3.unwrap());
+
+  String length(String string) => string.length.toString();
+
+  final unwrapOrElse = result3.unwrapOrElse('Default (((((Data)))))', length);
+  // Print the result of the last operation: `22`
+  print(unwrapOrElse);
+
   /// Apply transformation to successful operation results or handle an error.
-  if (result.isSuccess) {
-    final items = result
-        .map<Iterable<Photo>, NetworkError>(
-            (i) => i.where((j) => j.title.length > 60))
+  if (photosResult.isSuccess) {
+    final items = photosResult
+        .map(
+          (i) => i.where(
+            (j) => j.title.length > 60,
+          ),
+        )
         .success;
     print('Number of Long Titles: ${items.length}');
   } else {
-    print('Error: ${result.failure}');
+    print('Error: ${photosResult.failure}');
   }
 
   /// In this example, note the difference in the result of using `map` and
   /// `flatMap` with a transformation that returns an result type.
-  Result<int, Error> getNextInteger() => Success(random.nextInt(4));
-  Result<int, Error> getNextAfterInteger(int n) =>
+  Result<int, Exception> getNextInteger() => Success(random.nextInt(4));
+  Result<int, Exception> getNextAfterInteger(int n) =>
       Success(random.nextInt(n + 1));
 
-  final nextIntegerNestedResults =
-      getNextInteger().map<Result<int, Error>, dynamic>(getNextAfterInteger);
+  final nextIntegerNestedResults = getNextInteger().map(getNextAfterInteger);
   print(nextIntegerNestedResults.runtimeType);
   // Prints: Success<Result<int, Error>, dynamic>
 
@@ -45,78 +78,10 @@ void main() async {
   // Prints: Success<int, Error>
 
   /// Use completion handler / callback style API if you want to.
-  await getPhotos(client)
+  await PhotosService.getPhotos(client)
     ..result((photos) {
-      print('Photos: $photos');
+      // print('Photos: $photos');
     }, (error) {
       print('Error: $error');
     });
-}
-
-final class Photo {
-  final int id;
-  final String title;
-  final String thumbnailUrl;
-
-  const Photo({
-    required this.id,
-    required this.title,
-    required this.thumbnailUrl,
-  });
-
-  factory Photo.fromJson(Map<String, dynamic> json) {
-    return Photo(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String,
-    );
-  }
-
-  @override
-  String toString() =>
-      'Photo(id: $id, title: $title, thumbnailUrl: $thumbnailUrl)';
-}
-
-extension PhotoExtension on Photo {
-  static List<Photo> parsePhotos(String responseBody) {
-    final jsonObject = jsonDecode(responseBody) as Iterable;
-    return jsonObject
-        .map<Photo>(
-          (json) => Photo.fromJson(
-            Map<String, dynamic>.from(json as Map<String, dynamic>),
-          ),
-        )
-        .toList();
-  }
-}
-
-enum NetworkError implements Comparable<NetworkError> {
-  badRequest(400, 'Bad request'),
-  notFound(404, 'Not found');
-
-  final int code;
-  final String description;
-
-  const NetworkError(this.code, this.description);
-
-  @override
-  String toString() => 'NetworkError(code: $code, description: $description)';
-
-  @override
-  int compareTo(NetworkError other) => code - other.code;
-}
-
-Future<Result<List<Photo>, NetworkError>> getPhotos(http.Client client) async {
-  const path = 'https://jsonplaceholder.typicode.com/photos';
-  try {
-    final jsonString = await client.get(Uri.parse(path));
-    return Success(PhotoExtension.parsePhotos(jsonString.body));
-  } on NetworkError catch (error) {
-    switch (error) {
-      case NetworkError.badRequest:
-        return Failure(NetworkError.notFound);
-      default:
-        return Failure(NetworkError.badRequest);
-    }
-  }
 }

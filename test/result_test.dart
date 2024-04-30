@@ -141,7 +141,7 @@ void main() {
           Failure(MockError(error.code));
 
       final nextIntegerUnboxedResults =
-          getNextInteger().flatMapError(getNextAfterInteger);
+          getNextInteger().flatMapError<int, MockError>(getNextAfterInteger);
 
       expect(
         nextIntegerUnboxedResults,
@@ -157,13 +157,74 @@ void main() {
           Failure(MockError(error.code));
 
       final nextIntegerUnboxedResults =
-          getNextInteger().flatMapError(getNextAfterInteger);
+          getNextInteger().flatMapError<int, MockError>(getNextAfterInteger);
 
       expect(
         nextIntegerUnboxedResults,
         const TypeMatcher<Success<int, MockError>>(),
       );
     });
+  });
+
+  test('isFailure returns true for Failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    expect(result.isFailure, isTrue);
+  });
+
+  test('isFailure returns false for Success result', () {
+    final result = Success<int, MockError>(42);
+    expect(result.isFailure, isFalse);
+  });
+
+  test('isSuccess returns true for Success result', () {
+    final result = Success<int, MockError>(42);
+    expect(result.isSuccess, isTrue);
+  });
+
+  test('isSuccess returns false for Failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    expect(result.isSuccess, isFalse);
+  });
+
+  test('unwrapOrElse returns success value if result is success', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrapOrElse(0, (t) => t + 1);
+
+    expect(unwrapped, 42);
+  });
+
+  test('unwrapOrElse returns operation result if result is failure', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    final unwrapped = result.unwrapOrElse(0, (t) => t + 1);
+
+    expect(unwrapped, 1);
+  });
+
+  test('unwrapOr returns success value if result is success', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrapOr(0);
+
+    expect(unwrapped, 42);
+  });
+
+  test('unwrapOr returns initial value if result is failure', () {
+    final result = Failure<int, MockError>(const MockError(404));
+    final unwrapped = result.unwrapOr(0);
+
+    expect(unwrapped, 0);
+  });
+
+  test('Unwrap success result', () {
+    final result = Success<int, MockError>(42);
+    final unwrapped = result.unwrap();
+
+    expect(unwrapped, 42);
+  });
+
+  test('Throw exception when unwrapping failure result', () {
+    final result = Failure<int, MockError>(const MockError(404));
+
+    expect(result.unwrap, throwsException);
   });
 }
 
